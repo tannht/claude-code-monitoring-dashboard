@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(sqlite3:*)",
+      "Bash(lsof:*)",
+      "Bash(npm search:*)",
+      "Bash(npm install:*)",
+      "Bash(ruv-swarm:*)",
+      "Bash(npx ruv-swarm --help)",
+      "Bash(cat:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(claude-flow:*)",
+      "Bash(curl:*)",
+      "Bash(xargs kill:*)",
+      "mcp__zread__search_doc",
+      "mcp__zread__get_repo_structure",
+      "mcp__zread__read_file",
+      "Bash(ls:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm run mcp-server:*)",
+      "Skill(ccs-delegation)",
+      "Bash(jq:*)",
+      "Bash(python3:*)",
+      "Skill(ccs)",
+      "Bash(ccs --glmt \"Analyze the Claude Code monitoring dashboard and enhance it by adding missing data visualizations and features.\n\nContext:\n- Next.js 15 dashboard with Mantine UI\n- Reads from two SQLite databases \\(.hive-mind/hive.db and .swarm/memory.db\\)\n- Real-time monitoring via SSE/polling\n- Existing pages: agents, metrics, swarms, queries, status, settings\n\nTasks:\n1. Audit existing pages for missing data displays\n2. Identify gaps in metrics, alerts, or status information\n3. Add missing UI components or data visualizations\n4. Ensure all database tables are represented\n5. Add any missing real-time update hooks\n\nFocus on practical, useful additions that improve observability of the multi-agent swarm system.\")",
+      "Bash(ccs --help:*)",
+      "Bash(ccs glmt \"Analyze the Claude Code monitoring dashboard and enhance it by adding missing data visualizations and features.\n\nContext:\n- Next.js 15 dashboard with Mantine UI\n- Reads from two SQLite databases \\(.hive-mind/hive.db and .swarm/memory.db\\)\n- Real-time monitoring via SSE/polling\n- Existing pages: agents, metrics, swarms, queries, status, settings\n\nTasks:\n1. Audit existing pages for missing data displays\n2. Identify gaps in metrics, alerts, or status information\n3. Add missing UI components or data visualizations\n4. Ensure all database tables are represented\n5. Add any missing real-time update hooks\n\nFocus on practical, useful additions that improve observability of the multi-agent swarm system.\")",
+      "Bash(npx claude-flow@alpha swarm \"implement: Missing Database Tables\n  - messages - Inter-agent communication\n  - performance_metrics - Agent performance data\n  - patterns - Pattern discovery results\n  - task_trajectories - Task execution paths\n\n  Missing Pages \\(4\\)\n  1. Messages - Communication flow, message types, sender/receiver relationships\n  2. Performance Metrics - Agent performance trends, metric filtering\n  3. Patterns - Pattern discovery, confidence scores, usage frequency\n  4. Task Trajectories - Execution paths, judge labels, success patterns\n\n  Missing Visualizations\n  - Real-time alerts feed\n  - Agent performance timeline\n  - Task duration distribution\n  - Swarm communication diagram\n  - Token usage trends\n\n  Missing Real-Time Features\n  - Live alert notifications\n  - Connection status indicators\n  - Data freshness badges\n  - User-configurable polling\")",
+      "Bash(npx claude-flow@alpha swarm:*)",
+      "Bash(npm run type-check:*)",
+      "Bash(gh repo create:*)",
+      "Bash(git push:*)",
+      "Bash(git checkout:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git branch:*)"
+    ]
+  }
+}

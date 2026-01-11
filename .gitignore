@@ -1,0 +1,9 @@
+.hive-mind
+.claude-monitor
+.claude-flow
+.idea
+.next
+.swarm
+node_modules
+.env
+node_modules/
