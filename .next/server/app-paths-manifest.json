@@ -1,5 +1,18 @@
 {
+  "/agents/page": "app/agents/page.js",
+  "/api/agents/state/route": "app/api/agents/state/route.js",
+  "/api/queries/route": "app/api/queries/route.js",
+  "/api/sqlite/agents/route": "app/api/sqlite/agents/route.js",
+  "/api/sqlite/health/route": "app/api/sqlite/health/route.js",
+  "/api/sqlite/messages/route": "app/api/sqlite/messages/route.js",
+  "/api/sqlite/metrics/route": "app/api/sqlite/metrics/route.js",
+  "/api/sqlite/patterns/route": "app/api/sqlite/patterns/route.js",
+  "/api/sqlite/tasks/route": "app/api/sqlite/tasks/route.js",
   "/api/status/route": "app/api/status/route.js",
   "/metrics/page": "app/metrics/page.js",
-  "/page": "app/page.js"
+  "/page": "app/page.js",
+  "/patterns/page": "app/patterns/page.js",
+  "/queries/page": "app/queries/page.js",
+  "/swarms/page": "app/swarms/page.js",
+  "/tasks/page": "app/tasks/page.js"
 }

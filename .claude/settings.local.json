@@ -1,4 +1,12 @@
 {
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://api.z.ai/api/anthropic",
+    "ANTHROPIC_AUTH_TOKEN": "621d3e4b8ec94f7d8b4e81c70fd96d3e.v6c3x7kdA81zpIeS",
+    "ANTHROPIC_MODEL": "glm-4.7",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "glm-4.7",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "glm-4.7",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "glm-4.7"
+  },
   "permissions": {
     "allow": [
       "Bash(sqlite3:*)",
@@ -33,7 +41,18 @@
       "Bash(git checkout:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(git branch:*)"
+      "Bash(git branch:*)",
+      "mcp__web-search-prime__webSearchPrime",
+      "Bash(git clone:*)",
+      "Bash(./autonomy/run.sh:*)",
+      "Skill(loki-mode)",
+      "Bash(npm run lint:*)",
+      "Bash(npx playwright install:*)",
+      "Bash(npm run test:e2e:*)",
+      "Bash(CI=1 npm run test:e2e:*)",
+      "Bash(kill:*)",
+      "Bash(SKIP_WEB_SERVER=1 npm run test:e2e:*)",
+      "Bash(npx @claude-flow/cli@latest performance benchmark:*)"
     ]
   }
 }
