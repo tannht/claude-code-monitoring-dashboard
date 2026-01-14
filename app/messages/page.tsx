@@ -6,6 +6,8 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
+import { ExportButton } from "@/components/ui";
+import type { CSVColumn } from "@/lib/export";
 import { useRecentMessages, useAgentStats } from "@/hooks/useSqliteData";
 
 type MessageFilters = {
@@ -73,6 +75,26 @@ export default function MessagesPage() {
     return stats;
   }, [messages]);
 
+  // Export columns definition
+  const exportColumns = useMemo<CSVColumn[]>(
+    () => [
+      {
+        key: "timestamp",
+        label: "Timestamp",
+        formatter: (v) => (v ? new Date(v as string).toLocaleString() : ""),
+      },
+      { key: "fromAgentId", label: "From Agent" },
+      {
+        key: "toAgentId",
+        label: "To Agent",
+        formatter: (v) => (v ? String(v) : "broadcast"),
+      },
+      { key: "messageType", label: "Type" },
+      { key: "content", label: "Content" },
+    ],
+    []
+  );
+
   const messageTypeColors: Record<string, string> = {
     coordination: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
     result: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
@@ -100,12 +122,22 @@ export default function MessagesPage() {
               Inter-agent communication flow and message history
             </p>
           </div>
-          <button
-            onClick={refetch}
-            className="px-4 py-2 bg-slate-800 dark:bg-slate-700 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-slate-600 transition-colors"
-          >
-            🔄 Refresh
-          </button>
+          <div className="flex items-center gap-3">
+            <ExportButton
+              data={filteredMessages as unknown as Record<string, unknown>[]}
+              columns={exportColumns}
+              filename="messages"
+              label="Export"
+              disabled={filteredMessages.length === 0}
+              loading={loading}
+            />
+            <button
+              onClick={refetch}
+              className="px-4 py-2 bg-slate-800 dark:bg-slate-700 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-slate-600 transition-colors"
+            >
+              🔄 Refresh
+            </button>
+          </div>
         </header>
 
         {/* Stats Cards */}

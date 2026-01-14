@@ -5,8 +5,9 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
-import { MetricsCard, LineChart } from "@/components/ui";
+import { useEffect, useMemo, useState } from "react";
+import { MetricsCard, LineChart, ExportButton } from "@/components/ui";
+import type { CSVColumn } from "@/lib/export";
 import { useTaskStatus, useDailyMetrics, useDbHealth } from "@/hooks";
 import type { TaskInfo } from "@/lib/mcp/types";
 import type { DailyMetrics as DailyMetricsType } from "@/lib/db/schema";
@@ -32,6 +33,54 @@ export default function TasksPage() {
       }
     }
   }, [tasks, filter]);
+
+  // Export columns definition
+  const exportColumns = useMemo<CSVColumn[]>(
+    () => [
+      { key: "taskId", label: "Task ID" },
+      {
+        key: "description",
+        label: "Description",
+        formatter: (v) => (v ? String(v).slice(0, 200) : ""),
+      },
+      {
+        key: "status",
+        label: "Status",
+        formatter: (v) => (v ? String(v).replace("_", " ") : ""),
+      },
+      {
+        key: "priority",
+        label: "Priority",
+        formatter: (v) => (v ? String(v).toUpperCase() : ""),
+      },
+      {
+        key: "assignedAgent",
+        label: "Assigned Agent",
+        formatter: (v) => (v ? String(v) : "Unassigned"),
+      },
+      {
+        key: "createdAt",
+        label: "Created At",
+        formatter: (v) => (v ? new Date(v as string).toLocaleString() : ""),
+      },
+      {
+        key: "completedAt",
+        label: "Completed At",
+        formatter: (v) => (v ? new Date(v as string).toLocaleString() : ""),
+      },
+      {
+        key: "duration",
+        label: "Duration (s)",
+        formatter: (v) => (v ? `${(Number(v) / 1000).toFixed(1)}s` : ""),
+      },
+      {
+        key: "error",
+        label: "Error",
+        formatter: (v) => (v ? String(v).slice(0, 500) : ""),
+      },
+    ],
+    []
+  );
 
   const statusColors: Record<string, string> = {
     pending: "bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300",
@@ -77,12 +126,22 @@ export default function TasksPage() {
               Monitor task execution and progress
             </p>
           </div>
-          <button
-            onClick={refetch}
-            className="px-4 py-2 bg-slate-800 dark:bg-slate-700 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-slate-600 transition-colors"
-          >
-            🔄 Refresh
-          </button>
+          <div className="flex items-center gap-3">
+            <ExportButton
+              data={filteredTasks as unknown as Record<string, unknown>[]}
+              columns={exportColumns}
+              filename="tasks"
+              label="Export"
+              disabled={!tasks || tasks.length === 0}
+              loading={loading}
+            />
+            <button
+              onClick={refetch}
+              className="px-4 py-2 bg-slate-800 dark:bg-slate-700 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-slate-600 transition-colors"
+            >
+              🔄 Refresh
+            </button>
+          </div>
         </header>
 
         {/* Summary Cards */}

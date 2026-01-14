@@ -6,7 +6,8 @@
 "use client";
 
 import { useEffect } from "react";
-import { AlertConfigForm } from "@/components/settings";
+import { AlertConfigForm, DataRetentionForm } from "@/components/settings";
+import { IconDatabase } from "@tabler/icons-react";
 
 export default function SettingsPage() {
   useEffect(() => {
@@ -22,29 +23,22 @@ export default function SettingsPage() {
             ⚙️ Settings
           </h1>
           <p className="text-slate-600 dark:text-slate-400">
-            Configure monitoring, alerts, and notification channels
+            Configure monitoring, alerts, and data retention
           </p>
         </header>
 
         {/* Settings Content */}
-        <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-6 mb-6">
           <AlertConfigForm />
         </div>
 
-        {/* Info */}
-        <div className="mt-8 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-          <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">
-            ℹ️ About Alert Configuration
-          </h3>
-          <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
-            <li>• <strong>Slack</strong>: Send alerts to Slack channels using webhooks</li>
-            <li>• <strong>Webhook</strong>: Send alerts to any generic webhook endpoint</li>
-            <li>• <strong>Email</strong>: Email notifications (coming soon)</li>
-            <li>• <strong>Log</strong>: Always enabled, logs to .claude-monitor/logs/alerts.log</li>
-          </ul>
-          <p className="text-xs text-blue-600 dark:text-blue-400 mt-3">
-            💡 Tip: Use the Test Alert button to verify your configuration before saving
-          </p>
+        {/* Data Retention */}
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+          <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+            <IconDatabase size={24} className="text-purple-500" />
+            Data Retention Policies
+          </h2>
+          <DataRetentionForm />
         </div>
       </div>
     </main>

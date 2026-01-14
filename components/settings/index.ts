@@ -5,3 +5,4 @@
 
 export { AlertConfigForm } from "./AlertConfigForm";
 export type { AlertConfigFormProps } from "./AlertConfigForm";
+export { DataRetentionForm } from "./DataRetentionForm";

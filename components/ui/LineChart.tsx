@@ -40,6 +40,26 @@ function LineChartInner({
           toolbar: { show: false },
           background: "transparent",
           fontFamily: "inherit",
+          responsive: [
+            {
+              breakpoint: 768,
+              options: {
+                chart: {
+                  height: Math.max(height - 100, 200),
+                },
+                xaxis: {
+                  labels: {
+                    style: { fontSize: "10px" },
+                  },
+                },
+                yaxis: {
+                  labels: {
+                    style: { fontSize: "10px" },
+                  },
+                },
+              },
+            },
+          ],
         },
         colors,
         dataLabels: { enabled: false },
@@ -124,7 +144,7 @@ function LineChartInner({
   return (
     <div className={className}>
       {title && <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">{title}</h3>}
-      <div ref={chartRef} />
+      <div ref={chartRef} className="w-full" style={{ minHeight: `${height}px` }} />
     </div>
   );
 }

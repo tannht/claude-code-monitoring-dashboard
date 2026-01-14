@@ -5,8 +5,9 @@
 
 "use client";
 
-import { useEffect } from "react";
-import { MetricsCard } from "@/components/ui";
+import { useEffect, useMemo } from "react";
+import { MetricsCard, ExportButton } from "@/components/ui";
+import type { CSVColumn } from "@/lib/export";
 import { useAgentStats, useDbHealth } from "@/hooks";
 import { AgentStateCard } from "@/components/monitoring";
 
@@ -17,6 +18,43 @@ export default function AgentsPage() {
   useEffect(() => {
     document.title = "Agents - Claude Code Monitoring";
   }, []);
+
+  // Export columns definition
+  const exportColumns = useMemo<CSVColumn[]>(
+    () => [
+      { key: "agentId", label: "Agent ID" },
+      { key: "agentName", label: "Agent Name" },
+      { key: "agentType", label: "Agent Type" },
+      { key: "totalTasks", label: "Total Tasks", formatter: (v) => String(v || 0) },
+      { key: "completedTasks", label: "Completed", formatter: (v) => String(v || 0) },
+      { key: "failedTasks", label: "Failed", formatter: (v) => String(v || 0) },
+      {
+        key: "successRate",
+        label: "Success Rate",
+        formatter: (v) => (v ? `${Number(v).toFixed(1)}%` : "0%"),
+      },
+      {
+        key: "avgDuration",
+        label: "Avg Duration",
+        formatter: (v) => (v ? `${Math.round(Number(v) / 1000)}s` : "-"),
+      },
+      {
+        key: "lastActive",
+        label: "Last Active",
+        formatter: (v) => (v ? new Date(v as string).toLocaleString() : "Never"),
+      },
+      {
+        key: "status",
+        label: "Status",
+        formatter: (_v, _data) => {
+          const agent = _data as unknown as { lastActive?: string };
+          const isActive = agent?.lastActive && new Date(agent.lastActive) > new Date(Date.now() - 3600000);
+          return isActive ? "Active" : "Idle";
+        },
+      },
+    ],
+    []
+  );
 
   if (!healthy) {
     return (
@@ -48,12 +86,22 @@ export default function AgentsPage() {
               Monitor all agent performance metrics
             </p>
           </div>
-          <button
-            onClick={refetch}
-            className="px-4 py-2 bg-slate-800 dark:bg-slate-700 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-slate-600 transition-colors"
-          >
-            🔄 Refresh
-          </button>
+          <div className="flex items-center gap-3">
+            <ExportButton
+              data={(agents || []) as unknown as Record<string, unknown>[]}
+              columns={exportColumns}
+              filename="agents"
+              label="Export"
+              disabled={!agents || agents.length === 0}
+              loading={loading}
+            />
+            <button
+              onClick={refetch}
+              className="px-4 py-2 bg-slate-800 dark:bg-slate-700 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-slate-600 transition-colors"
+            >
+              🔄 Refresh
+            </button>
+          </div>
         </header>
 
         {/* Summary Cards */}

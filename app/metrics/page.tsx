@@ -5,8 +5,9 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
-import { MetricsCard, LineChart } from "@/components/ui";
+import { useEffect, useMemo, useState } from "react";
+import { MetricsCard, LineChart, ExportButton } from "@/components/ui";
+import type { CSVColumn } from "@/lib/export";
 import { useMcpOverview, useMcpMemory, useMcpAgents } from "@/hooks/useMcpApi";
 import { MemoryNamespaceBreakdown } from "@/components/monitoring";
 
@@ -50,10 +51,47 @@ export default function MetricsPage() {
       });
 
   // Namespace breakdown for chart
-  const namespaceData = memoryData?.stats?.byNamespace || {};
+  const namespaceData = useMemo(() => {
+    return memoryData?.stats?.byNamespace || {};
+  }, [memoryData?.stats?.byNamespace]);
+
   const sortedNamespaces = Object.entries(namespaceData)
     .sort(([, a], [, b]) => b - a)
     .slice(0, 8);
+
+  // Export data: namespace metrics
+  const namespaceExportData = useMemo(() => {
+    return Object.entries(namespaceData).map(([name, count]) => ({
+      namespace: name,
+      count,
+      percentage: totalMemory > 0 ? ((count / totalMemory) * 100).toFixed(1) : "0",
+    }));
+  }, [namespaceData, totalMemory]);
+
+  // Export columns for namespace data
+  const namespaceExportColumns: CSVColumn[] = [
+    { key: "namespace", label: "Namespace" },
+    { key: "count", label: "Entry Count" },
+    { key: "percentage", label: "Percentage" },
+  ];
+
+  // Export data: agent status
+  const agentExportData = useMemo(() => {
+    return (agentsData?.items || []).map((agent) => ({
+      id: agent.id,
+      name: agent.name,
+      type: agent.type,
+      status: agent.status,
+    }));
+  }, [agentsData]);
+
+  // Export columns for agent data
+  const agentExportColumns: CSVColumn[] = [
+    { key: "id", label: "Agent ID" },
+    { key: "name", label: "Agent Name" },
+    { key: "type", label: "Agent Type" },
+    { key: "status", label: "Status" },
+  ];
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
@@ -67,6 +105,22 @@ export default function MetricsPage() {
             <p className="text-slate-600 dark:text-slate-400">
               Real-time metrics from MCP server
             </p>
+          </div>
+          <div className="flex items-center gap-3">
+            <ExportButton
+              data={namespaceExportData as unknown as Record<string, unknown>[]}
+              columns={namespaceExportColumns}
+              filename="metrics-namespaces"
+              label="Export Namespaces"
+              disabled={namespaceExportData.length === 0}
+            />
+            <ExportButton
+              data={agentExportData as unknown as Record<string, unknown>[]}
+              columns={agentExportColumns}
+              filename="metrics-agents"
+              label="Export Agents"
+              disabled={agentExportData.length === 0}
+            />
           </div>
         </header>
 

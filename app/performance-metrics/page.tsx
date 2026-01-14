@@ -6,6 +6,8 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
+import { ExportButton } from "@/components/ui";
+import type { CSVColumn } from "@/lib/export";
 import { usePerformanceMetrics, useAgentStats } from "@/hooks/useSqliteData";
 import { LineChart } from "@/components/ui";
 
@@ -83,6 +85,26 @@ export default function PerformanceMetricsPage() {
     return { avg, min, max, count: values.length };
   }, [filteredMetrics]);
 
+  // Export columns definition
+  const exportColumns = useMemo<CSVColumn[]>(
+    () => [
+      {
+        key: "timestamp",
+        label: "Timestamp",
+        formatter: (v) => (v ? new Date(v as string).toLocaleString() : ""),
+      },
+      { key: "agent_id", label: "Agent ID" },
+      { key: "metricName", label: "Metric Name" },
+      {
+        key: "metricValue",
+        label: "Value",
+        formatter: (v) => (typeof v === "number" ? v.toFixed(2) : String(v)),
+      },
+      { key: "unit", label: "Unit" },
+    ],
+    []
+  );
+
   return (
     <main className="min-h-screen bg-slate-50 dark:bg-slate-900">
       <div className="container mx-auto px-4 py-8">
@@ -96,12 +118,22 @@ export default function PerformanceMetricsPage() {
               Agent performance trends and metric analysis
             </p>
           </div>
-          <button
-            onClick={refetch}
-            className="px-4 py-2 bg-slate-800 dark:bg-slate-700 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-slate-600 transition-colors"
-          >
-            🔄 Refresh
-          </button>
+          <div className="flex items-center gap-3">
+            <ExportButton
+              data={filteredMetrics as unknown as Record<string, unknown>[]}
+              columns={exportColumns}
+              filename="performance-metrics"
+              label="Export"
+              disabled={filteredMetrics.length === 0}
+              loading={loading}
+            />
+            <button
+              onClick={refetch}
+              className="px-4 py-2 bg-slate-800 dark:bg-slate-700 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-slate-600 transition-colors"
+            >
+              🔄 Refresh
+            </button>
+          </div>
         </header>
 
         {/* Filters */}
